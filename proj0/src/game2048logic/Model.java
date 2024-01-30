@@ -3,7 +3,6 @@ package game2048logic;
 import game2048rendering.Board;
 import game2048rendering.Side;
 import game2048rendering.Tile;
-import net.sf.saxon.functions.ConstantFunction;
 
 import java.util.Formatter;
 
