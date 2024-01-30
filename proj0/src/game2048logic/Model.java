@@ -177,12 +177,12 @@ public class Model {
         int myValue = currTile.value();
         int targetY = y;
         boolean merge = false;
-        for (int posY = y + 1; posY < board.size(); posY++) {
-            Tile tileAbove = board.tile(x, posY);
+        for (int yposition = y + 1; yposition < board.size(); yposition++) {
+            Tile tileAbove = board.tile(x, yposition);
             if (tileAbove == null) {
-                targetY = posY;
+                targetY = yposition;
             } else if (tileAbove.value() == myValue && !tileAbove.wasMerged()) {
-                targetY = posY;
+                targetY = yposition;
                 merge = true;
                 break;
             } else {
@@ -209,9 +209,9 @@ public class Model {
      * */
     public void tiltColumn(int x) {
         int size = board.size();
-        for (int y = size - 1; y >= 0; y--) {
-            if (board.tile(x, y) != null) {
-                moveTileUpAsFarAsPossible(x, y);
+        for (int i = size - 1; i >= 0; i--) {
+            if (board.tile(x, i) != null) {
+                moveTileUpAsFarAsPossible(x, i);
             }
         }
     }
@@ -219,8 +219,8 @@ public class Model {
 
     public void tilt(Side side) {
         board.setViewingPerspective(side);
-        for (int x = 0; x < board.size(); x++) {
-            tiltColumn(x);
+        for (int i = 0; i < board.size(); i++) {
+            tiltColumn(i);
         }
         board.setViewingPerspective(Side.NORTH);
     }
