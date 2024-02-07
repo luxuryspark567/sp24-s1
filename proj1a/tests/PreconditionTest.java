@@ -14,19 +14,26 @@ import java.util.stream.Stream;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.jupiter.api.Assertions.fail;
 
-/** Tests that the LinkedListDeque61B class is structured correctly.
- *  @author Noah Adhikari */
+/**
+ * Tests that the LinkedListDeque61B class is structured correctly.
+ *
+ * @author Noah Adhikari
+ */
 public class PreconditionTest {
 
-    /** Returns the inner class of lld. Asserts there is exactly one inner class. */
+    /**
+     * Returns the inner class of lld. Asserts there is exactly one inner class.
+     */
     private static Class<?> getLldInnerClass() {
         Class<?>[] innerClasses = LinkedListDeque61B.class.getDeclaredClasses();
         assertWithMessage("LinkedListDeque61B should have exactly one inner class").that(innerClasses).hasLength(1);
         return innerClasses[0];
     }
 
-    /** Returns a stream of all fields in c that are not primitives, synthetic, generic (Object),
-     *  or of type nodeClass. */
+    /**
+     * Returns a stream of all fields in c that are not primitives, synthetic, generic (Object),
+     * or of type nodeClass.
+     */
     private static Stream<Field> getBadFields(Class<?> c, Class<?> nodeClass) {
         return Reflection.getFields(c)
                 .filter(f -> !(f.getType().isPrimitive()
