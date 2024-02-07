@@ -183,4 +183,17 @@ public class LinkedListDeque61BTest {
         Deque61B<String> lld1 = new LinkedListDeque61B<>();
         assertThat(lld1.getRecursive(0)).isNull();
     }
+    @Test
+    public void toListEmpty() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+        assertThat(lld1.toList()).isEmpty();
+    }
+    @Test
+    public void toListNonEmpty() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+        lld1.addLast("Hi");
+        lld1.addLast("mom");
+        assertThat(lld1.toList()).containsExactly("Hi", "mom").inOrder();
+    }
+
 }
