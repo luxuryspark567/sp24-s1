@@ -168,29 +168,41 @@ public class ArrayDeque61BTest {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(1);
         deque.addLast(2);
-        assert deque.get(1) == 2;
+        assertThat(deque.get(1)).isEqualTo(2);
     }
 
     @Test
     public void getOobLarge() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(1);
-        assert deque.get(100) == null;
+        assertThat(deque.get(100)).isNull();
     }
 
     @Test
     public void getOobNeg() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(1);
-        assert deque.get(-1) == null;
+        assertThat(deque.get(-1)).isNull();
     }
 
     @Test
     public void size() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
+        assertThat(deque.size()).isEqualTo(0);
         deque.addLast(1);
+        assertThat(deque.size()).isEqualTo(1);
+        deque.addFirst(0);
+        assertThat(deque.size()).isEqualTo(2);
+        deque.removeFirst();
+        assertThat(deque.size()).isEqualTo(1);
         deque.addLast(2);
-        assert deque.size() == 2;
+        deque.addLast(3);
+        assertThat(deque.size()).isEqualTo(3);
+        deque.removeLast();
+        assertThat(deque.size()).isEqualTo(2);
+        deque.removeFirst();
+        deque.removeLast();
+        assertThat(deque.size()).isEqualTo(0);
     }
 
     @Test
@@ -198,14 +210,14 @@ public class ArrayDeque61BTest {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(1);
         deque.removeLast();
-        assert deque.size() == 0;
+        assertThat(deque.size()).isEqualTo(0);
     }
 
     @Test
     public void sizeRemoveFromEmpty() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
-        deque.removeLast();
-        assert deque.size() == 0;
+        deque.removeFirst();
+        assertThat(deque.size()).isEqualTo(0);
     }
 
     @Test
@@ -224,7 +236,7 @@ public class ArrayDeque61BTest {
     @Test
     public void toListEmpty() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
-        assert deque.toList().isEmpty();
+        assertThat(deque.toList()).isEmpty();
     }
 
     @Test
@@ -233,8 +245,8 @@ public class ArrayDeque61BTest {
         deque.addLast(1);
         deque.addLast(2);
         deque.addLast(3);
-        List<Integer> expectedList = Arrays.asList(1, 2, 3);
-        assert expectedList.equals(deque.toList());
+        List<Integer> expected = Arrays.asList(1, 2, 3);
+        assertThat(deque.toList()).isEqualTo(expected);
     }
 
     @Test
