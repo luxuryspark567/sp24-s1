@@ -223,14 +223,14 @@ public class ArrayDeque61BTest {
     @Test
     public void emptyTrue() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
-        assert deque.isEmpty();
+        assertThat(deque.isEmpty()).isTrue();
     }
 
     @Test
     public void emptyFalse() {
         ArrayDeque61B<Integer> deque = new ArrayDeque61B<>();
         deque.addLast(1);
-        assert !deque.isEmpty();
+        assertThat(deque.isEmpty()).isFalse();
     }
 
     @Test
