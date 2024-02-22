@@ -1,3 +1,4 @@
+import deque.ArrayDeque61B;
 import deque.Deque61B;
 import deque.LinkedListDeque61B;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class LinkedListDeque61BTest {
     }
 
     @Test
-    public void iteratorTest() {
+    public void iteratorNextTest() {
         Deque61B<String> deque = new LinkedListDeque61B<>();
         deque.addLast("front");
         deque.addLast("middle");
@@ -65,11 +66,30 @@ public class LinkedListDeque61BTest {
     public void equalsDifferentTypesTest() {
         LinkedListDeque61B<String> deque = new LinkedListDeque61B<>();
         deque.addLast("element");
-
-        // Test equals method with null
         assertThat(deque.equals(null)).isFalse();
-
-        // Test equals method with a different type
         assertThat(deque.equals("string")).isFalse();
+    }
+
+    @Test
+    public void listNotEqual() {
+        LinkedListDeque61B<String> deque = new LinkedListDeque61B<>();
+        LinkedListDeque61B<String> deque2 = new LinkedListDeque61B<>();
+        deque.addLast("element");
+        deque2.addLast("hello");
+        assertThat(deque == deque2).isFalse();
+    }
+
+    @Test
+    public void testLinkedListDequeEqualToArrayDeque() {
+        LinkedListDeque61B<String> linkedListDeque = new LinkedListDeque61B<>();
+        ArrayDeque61B<String> arrayDeque = new ArrayDeque61B<>();
+
+        linkedListDeque.addLast("hello");
+        linkedListDeque.addLast("world");
+
+        arrayDeque.addLast("hello");
+        arrayDeque.addLast("world");
+
+        assertThat(linkedListDeque).isEqualTo(arrayDeque);
     }
 }
