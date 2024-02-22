@@ -49,7 +49,7 @@ public class ArrayDeque61BTest {
 
     @Test
     public void removeSingleElementDequeTest() {
-        Deque61B<String> deque = new ArrayDeque61B<>();
+        ArrayDeque61B<String> deque = new ArrayDeque61B<>();
         deque.addFirst("only");
         String removedFirst = deque.removeFirst();
         assertThat(removedFirst).isEqualTo("only");
@@ -62,7 +62,7 @@ public class ArrayDeque61BTest {
 
     @Test
     public void equalsDifferentTypesTest() {
-        Deque61B<String> deque = new ArrayDeque61B<>();
+        ArrayDeque61B<String> deque = new ArrayDeque61B<>();
         deque.addLast("element");
 
         // Test equals method with null
