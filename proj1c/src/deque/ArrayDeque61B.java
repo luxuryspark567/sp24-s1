@@ -113,32 +113,10 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
         nextL = size;
     }
 
-    private class ArrayIterator<T> implements Iterator<T> {
-        private int position;
-
-        public ArrayIterator() {
-            position = 0;
-        }
-
-        @Override
-        public boolean hasNext() {
-
-            return position < size;
-        }
-
-        @Override
-        public T next() {
-            T returnItem = (T) items[position];
-            position += 1;
-            return returnItem;
-        }
-    }
-
     @Override
     public Iterator<T> iterator() {
         return new ArrayIterator<>();
     }
-
     @Override
     public String toString() {
         return toList().toString();
@@ -171,4 +149,29 @@ public class ArrayDeque61B<T> implements Deque61B<T> {
 
         return true;
     }
+
+    private class ArrayIterator<T> implements Iterator<T> {
+        private int position;
+
+        public ArrayIterator() {
+            position = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+
+            return position < size;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                return null;
+            }
+            T returnItem = (T) items[(nextF + 1 + position) % items.length];
+            position++;
+            return returnItem;
+        }
+    }
 }
+

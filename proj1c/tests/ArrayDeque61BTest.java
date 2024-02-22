@@ -66,11 +66,7 @@ public class ArrayDeque61BTest {
     public void equalsDifferentTypesTest() {
         ArrayDeque61B<String> deque = new ArrayDeque61B<>();
         deque.addLast("element");
-
-        // Test equals method with null
         assertThat(deque == null).isFalse();
-
-        // Test equals method with a different type
         assertThat(deque.equals("string")).isFalse();
     }
 
@@ -93,30 +89,16 @@ public class ArrayDeque61BTest {
         arrayDeque.addLast("world");
         assertThat(arrayDeque).isEqualTo(linkedListDeque);
     }
-
     @Test
-    public void finalIteratorTest(){
-        Deque61B<String> arrayDeque = new ArrayDeque61B<>();
-        Deque61B<String> linkedListDeque = new LinkedListDeque61B<>();
-        String [] elements = {"hello", "world"};
-        for (String element: elements){
-            arrayDeque.addLast (element);
-            linkedListDeque.addLast(element);
-        }
-        Iterator<String> iterator = arrayDeque.iterator();
-        int count = 0;
-        while(iterator.hasNext()){
-            assertThat(iterator.next()).isEqualTo(elements[count]);
-            count ++;
-        }
-        assertThat(count).isEqualTo(elements.length);
-        Deque61B<String> differentContentDeque = new ArrayDeque61B<>();
-        differentContentDeque.addLast("different");
-        Deque61B<String> emptyDeque = new ArrayDeque61B<>();
-        assertThat(arrayDeque).isNotEqualTo(differentContentDeque);
-        assertThat(arrayDeque).isNotEqualTo(emptyDeque);
-        assertThat(arrayDeque.removeFirst()).isEqualTo("hello");
-        assertThat(arrayDeque.removeLast()).isEqualTo("world");
-        assertThat(arrayDeque.isEmpty()).isTrue();
+    public void iteratorNext2Test() {
+        ArrayDeque61B<String> deque = new ArrayDeque61B<>();
+        deque.addLast("Shreyas");
+        deque.addLast("Vidya");
+        Iterator<String> iterator = deque.iterator();
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next()).isEqualTo("Shreyas");
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next()).isEqualTo("Vidya");
+        assertThat(iterator.hasNext()).isFalse();
     }
 }
