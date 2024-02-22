@@ -1,10 +1,9 @@
-import org.junit.jupiter.api.*;
+import deque.MaxArrayDeque61B;
+import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
-import deque.MaxArrayDeque61B;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 
 public class MaxArrayDeque61BTest {
     private static class StringLengthComparator implements Comparator<String> {
@@ -14,11 +13,25 @@ public class MaxArrayDeque61BTest {
     }
 
     @Test
+    public void emptyTest() {
+        MaxArrayDeque61B<String> mad = new MaxArrayDeque61B<>(new StringLengthComparator());
+        assertThat(mad.max()).isNull();
+    }
+
+
+    @Test
     public void basicTest() {
         MaxArrayDeque61B<String> mad = new MaxArrayDeque61B<>(new StringLengthComparator());
         mad.addFirst("");
         mad.addFirst("2");
         mad.addFirst("fury road");
         assertThat(mad.max()).isEqualTo("fury road");
+    }
+
+    private static class ReverseComparator implements Comparator<Integer> {
+        public int compare(Integer a, Integer b) {
+
+            return b - a;
+        }
     }
 }

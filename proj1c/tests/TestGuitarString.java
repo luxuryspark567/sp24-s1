@@ -1,16 +1,19 @@
 /* Imports the required audio library from the
  * edu.princeton.cs.algs4 package. */
+
 import edu.princeton.cs.algs4.StdAudio;
-import org.junit.jupiter.api.Test;
 import gh2.GuitarString;
+import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
-/** Tests the GuitarString class.
- *  @author Josh Hug
+/**
+ * Tests the GuitarString class.
+ *
+ * @author Josh Hug
  */
-public class TestGuitarString  {
+public class TestGuitarString {
 
     @Test
     public void testPluckTheAString() {
