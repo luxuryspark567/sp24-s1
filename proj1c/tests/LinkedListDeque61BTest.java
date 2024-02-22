@@ -83,13 +83,10 @@ public class LinkedListDeque61BTest {
     public void testLinkedListDequeEqualToArrayDeque() {
         LinkedListDeque61B<String> linkedListDeque = new LinkedListDeque61B<>();
         ArrayDeque61B<String> arrayDeque = new ArrayDeque61B<>();
-
         linkedListDeque.addLast("hello");
         linkedListDeque.addLast("world");
-
         arrayDeque.addLast("hello");
         arrayDeque.addLast("world");
-
         assertThat(linkedListDeque).isEqualTo(arrayDeque);
     }
 }

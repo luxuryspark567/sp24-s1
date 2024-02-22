@@ -132,10 +132,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         if (this.size() != otherDeck.size()) {
             return false;
         }
-
         Iterator<T> thisIter = this.iterator();
         Iterator<?> otherIter = otherDeck.iterator();
-
         while (thisIter.hasNext() && otherIter.hasNext()) {
             T thisElement = thisIter.next();
             Object otherElement = otherIter.next();

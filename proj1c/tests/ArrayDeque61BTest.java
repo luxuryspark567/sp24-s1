@@ -41,9 +41,11 @@ public class ArrayDeque61BTest {
         deque.addLast("third");
         Iterator<String> iterator = deque.iterator();
         assertThat(iterator.hasNext()).isTrue();
-        assertThat(iterator.next()).isEqualTo("first");
-        assertThat(iterator.next()).isEqualTo("second");
-        assertThat(iterator.next()).isEqualTo("third");
+        assertThat("first").isEqualTo(iterator.next());
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat("second").isEqualTo(iterator.next());
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat("third").isEqualTo(iterator.next());
         assertThat(iterator.hasNext()).isFalse();
     }
 
@@ -89,6 +91,6 @@ public class ArrayDeque61BTest {
         linkedListDeque.addLast("world");
         arrayDeque.addLast("hello");
         arrayDeque.addLast("world");
-        assertThat(linkedListDeque).isEqualTo(arrayDeque);
+        assertThat(arrayDeque).isEqualTo(linkedListDeque);
     }
 }
