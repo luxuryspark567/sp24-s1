@@ -24,7 +24,7 @@ public class Percolation {
 
     private void valIndex(int row, int col) {
         if (row < 0 || row >= n || col < 0 || col >= n) {
-            throw new IllegalArgumentException("row or col out of bounds");
+            throw new IndexOutOfBoundsException("row or col out of bounds");
         }
     }
 
