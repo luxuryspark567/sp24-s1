@@ -1,7 +1,6 @@
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.fail;
 
 public class UnionFindTest {
@@ -37,7 +36,6 @@ public class UnionFindTest {
             uf.union(1, 10);
             fail("Cannot union with an out of range vertex!");
         } catch (IllegalArgumentException e) {
-            return;
         }
     }
 
