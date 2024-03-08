@@ -1,5 +1,6 @@
 package ngrams;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -30,15 +31,16 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
-        // TODO: Fill in this constructor.
+        ts.subMap(startYear, true, endYear, true).forEach((year, value) -> {
+            this.put(year, value);
+        });
     }
 
     /**
      * Returns all years for this TimeSeries (in any order).
      */
     public List<Integer> years() {
-        // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(this.keySet());
     }
 
     /**
@@ -46,8 +48,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * Must be in the same order as years().
      */
     public List<Double> data() {
-        // TODO: Fill in this method.
-        return null;
+        return new ArrayList<>(this.values());
     }
 
     /**
@@ -60,8 +61,21 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * should store the value from the TimeSeries that contains that year.
      */
     public TimeSeries plus(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries fResult = new TimeSeries();
+        this.forEach((year, value) -> {
+            Double oValue = ts.get(year);
+            if (oValue != null) {
+                fResult.put(year, value + oValue);
+            } else {
+                fResult.put(year, value);
+            }
+        });
+        ts.forEach((year, value) -> {
+            if (!this.containsKey(year)) {
+                fResult.put(year, value);
+            }
+        });
+        return fResult;
     }
 
     /**
@@ -74,10 +88,14 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * If TS has a year that is not in this TimeSeries, ignore it.
      */
     public TimeSeries dividedBy(TimeSeries ts) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries fResult = new TimeSeries();
+        this.forEach((year, value) -> {
+            if (ts.containsKey(year)) {
+                fResult.put(year, value / ts.get(year));
+            } else {
+                throw new IllegalArgumentException("Year" + year + "exists in TimeSeries but not divisor");
+            }
+        });
+        return fResult;
     }
-
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
 }
