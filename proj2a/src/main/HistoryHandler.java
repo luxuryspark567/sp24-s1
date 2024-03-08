@@ -1,5 +1,4 @@
 package main;
-
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
 import ngrams.NGramMap;
@@ -11,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryHandler extends NgordnetQueryHandler {
-    private NGramMap nGramMap;
+    private final NGramMap nGramMap;
+
     public HistoryHandler(NGramMap map) {
         this.nGramMap = map;
     }

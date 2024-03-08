@@ -2,19 +2,15 @@ package ngrams;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Time;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import static ngrams.TimeSeries.MAX_YEAR;
-import static ngrams.TimeSeries.MIN_YEAR;
-
 /**
  * An object that provides utility methods for making queries on the
  * Google NGrams dataset (or a subset thereof).
- *
+ * <p>
  * An NGramMap stores pertinent data from a "words file" and a "counts
  * file". It is not a map in the strict sense, but it does provide additional
  * functionality.
@@ -22,8 +18,8 @@ import static ngrams.TimeSeries.MIN_YEAR;
  * @author Josh Hug
  */
 public class NGramMap {
-    private HashMap<String, TimeSeries> history = new HashMap<>();
-    private TimeSeries tCounts = new TimeSeries();
+    private final HashMap<String, TimeSeries> historyT = new HashMap<>();
+    private final TimeSeries tCounts = new TimeSeries();
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
@@ -32,38 +28,39 @@ public class NGramMap {
         loadCountsFile(countsFilename);
         loadWordsFile(wordsFilename);
     }
-    private void loadWordsFile(String filename){
+
+    private void loadWordsFile(String filename) {
         try {
             Scanner scan = new Scanner(new File(filename));
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                String [] parts = line.split("\t");
+                String[] parts = line.split("\t");
                 String word = parts[0];
-                int year  = Integer.parseInt(parts[1]);
+                int year = Integer.parseInt(parts[1]);
                 double count = Double.parseDouble(parts[2]);
-                TimeSeries ts = history.getOrDefault(word, new TimeSeries());
+                TimeSeries ts = historyT.getOrDefault(word, new TimeSeries());
                 ts.put(year, count);
-                history.put(word, ts);
+                historyT.put(word, ts);
             }
             scan.close();
         } catch (FileNotFoundException e) {
-            System.err.println(("File not found: " +filename));
+            System.err.println(("File not found: " + filename));
         }
     }
 
-    private void loadCountsFile(String filename){
+    private void loadCountsFile(String filename) {
         try {
             Scanner scan = new Scanner(new File(filename));
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                String [] parts = line.split(",");
-                int year  = Integer.parseInt(parts[0]);
+                String[] parts = line.split(",");
+                int year = Integer.parseInt(parts[0]);
                 double count = Double.parseDouble(parts[1]);
                 tCounts.put(year, count);
             }
             scan.close();
         } catch (FileNotFoundException e) {
-            System.err.println(("File not found: " +filename));
+            System.err.println(("File not found: " + filename));
         }
     }
 
@@ -75,7 +72,7 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int start, int end) {
-        TimeSeries og = history.getOrDefault(word, new TimeSeries());
+        TimeSeries og = historyT.getOrDefault(word, new TimeSeries());
         return new TimeSeries(og, start, end);
     }
 
@@ -131,15 +128,15 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-       TimeSeries sHistory = new TimeSeries();
-       for (String word : words) {
-           TimeSeries wHistory = weightHistory(word, startYear, endYear);
-           for (Map.Entry<Integer, Double> entry : wHistory.entrySet()) {
-               Integer year = entry.getKey();
-               Double frequency = entry.getValue();
-               sHistory.put(year, sHistory.getOrDefault(year, 0.0) + frequency);
-           }
-       }
+        TimeSeries sHistory = new TimeSeries();
+        for (String word : words) {
+            TimeSeries wHistory = weightHistory(word, startYear, endYear);
+            for (Map.Entry<Integer, Double> entry : wHistory.entrySet()) {
+                Integer year = entry.getKey();
+                Double frequency = entry.getValue();
+                sHistory.put(year, sHistory.getOrDefault(year, 0.0) + frequency);
+            }
+        }
         return sHistory;
     }
 

@@ -1,11 +1,12 @@
 package main;
 
-import static utils.Utils.*;
-
-import org.slf4j.LoggerFactory;
-
 import browser.NgordnetServer;
 import ngrams.NGramMap;
+import org.slf4j.LoggerFactory;
+
+import static utils.Utils.TOP_49887_WORDS_FILE;
+import static utils.Utils.TOTAL_COUNTS_FILE;
+
 public class Main {
     static {
         LoggerFactory.getLogger(Main.class).info("\033[1;38mChanging text color to white");
