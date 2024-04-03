@@ -26,5 +26,52 @@ public class TestOneWordKNot0Hyponyms {
         assertThat(actual).isEqualTo(expected);
     }
 
-    // TODO: Add more unit tests (including edge case tests) here.
+    @Test
+    public void testEmpty() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of();
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2020, 4, NgordnetQueryType.HYPONYMS);
+        String actual = studentHandler.handle(nq);
+        String expected = "[]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testWrong() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("peanutbutterjellytime");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2020, 4, NgordnetQueryType.HYPONYMS);
+        String actual = studentHandler.handle(nq);
+        String expected = "[]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testDouble() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("CS61A", "CS170");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2020, 2, NgordnetQueryType.HYPONYMS);
+        String actual = studentHandler.handle(nq);
+        String expected = "[CS170, CS172]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testNegativeK() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("CS170");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2000, 2020, -2, NgordnetQueryType.HYPONYMS);
+        String actual = studentHandler.handle(nq);
+        String expected = "[CS170, CS172, CS174, CS176, CS191]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }
