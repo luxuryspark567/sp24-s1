@@ -12,17 +12,17 @@ public class Graph {
     }
 
     public void addNode(int nodeID) {
-        if (!adjacencyList.containsKey(nodeID)) {
-            adjacencyList.put(nodeID, new HashSet<>());
-            reverseList.put(nodeID, new HashSet<>());
-        }
+        adjacencyList.putIfAbsent(nodeID, new HashSet<>());
+        reverseList.putIfAbsent(nodeID, new HashSet<>());
+        // used https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#putIfAbsent-K-V-/ //
     }
 
     public void addEdge(int fNodeID, int tNodeID) {
-        adjacencyList.get(fNodeID).add(tNodeID);
-        reverseList.get(tNodeID).add(fNodeID);
+        adjacencyList.computeIfAbsent(fNodeID, k -> new HashSet<>()).add(tNodeID);
+        reverseList.computeIfAbsent(tNodeID, k -> new HashSet<>()).add(fNodeID);
         //https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#computeIfAbsent-K-java.util.function.Function-//
     }
+
 
     public Set<Integer> getNodes(int start) {
         return helper(start, adjacencyList);
@@ -33,19 +33,16 @@ public class Graph {
     }
 
     private Set<Integer> helper(int start, Map<Integer, Set<Integer>> graph) {
-        Set<Integer> visit = new HashSet<>();
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
+        Set<Integer> ancestors = new HashSet<>();
+        Queue<Integer> visit = new LinkedList<>();
         visit.add(start);
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            for (int neighbor : graph.getOrDefault(current, Collections.emptySet())) {
-                if (!visit.contains(neighbor)) {
-                    visit.add(neighbor);
-                    queue.add(neighbor);
-                }
+        while (!visit.isEmpty()) {
+            int current = visit.remove();
+            if (!ancestors.contains(current)) {
+                ancestors.add(current);
+                visit.addAll(graph.get(current));
             }
         }
-        return visit;
+        return ancestors;
     }
 }

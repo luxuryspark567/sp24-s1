@@ -11,8 +11,8 @@ import java.util.*;
 public class HyponymsHandler extends NgordnetQueryHandler {
     private final WordNet wordNet;
     private final NGramMap mapN;
-    private final int start = 1900;
-    private final int end = 2020;
+    private final int startYEAR = 1900;
+    private final int endYEAR = 2020;
 
     public HyponymsHandler(WordNet wordNet, NGramMap mapN) {
         this.wordNet = wordNet;
@@ -22,24 +22,18 @@ public class HyponymsHandler extends NgordnetQueryHandler {
     @Override
     public String handle(NgordnetQuery query) {
         List<String> words = query.words();
-        int startYear = query.startYear() == 0 ? start : query.startYear();
-        int endYear = query.endYear() == 0 ? end : query.endYear();
+        int startYear = query.startYear() == 0 ? startYEAR : query.startYear();
+        int endYear = query.startYear() == 0 ? endYEAR : query.endYear();
         int k = query.k();
         Set<String> result;
 
         if (query.ngordnetQueryType() == NgordnetQueryType.HYPONYMS) {
             result = wordNet.commonHyponym(words);
-        } else if (query.ngordnetQueryType() == NgordnetQueryType.ANCESTORS) {
-            result = wordNet.commonAncestor(words);
         } else {
-            result = new HashSet<>();
+            result = wordNet.commonAncestor(words);
         }
-        return finalResult(result, startYear, endYear, k);
-    }
-
-    private String finalResult(Set<String> result, int startYear, int endYear, int k) {
         if (k > 0) {
-            return topKWords(result, startYear, endYear, k).toString();
+            return getAlphabetical(result, startYear, endYear, k).toString();
         } else {
             List<String> resultList = new ArrayList<>(result);
             Collections.sort(resultList);
@@ -47,37 +41,28 @@ public class HyponymsHandler extends NgordnetQueryHandler {
         }
     }
 
-    private List<String> topKWords(Set<String> words, int startYear, int endYear, int k) {
-        Map<String, Double> wCount = new TreeMap<>();
+    private List<String> getAlphabetical(Set<String> words, int startYear, int endYear, int k) {
+        List<Map.Entry<String, Double>> sorted = new ArrayList<>();
         for (String word : words) {
-            double total = totalWords(word, startYear, endYear);
-            if (total > 0) {
-                wCount.put(word, total);
+            double count = totalWords(word, startYear, endYear);
+            if (count > 0) {
+                sorted.add(new AbstractMap.SimpleEntry<>(word, count));
             }
         }
-
-        List<Map.Entry<String, Double>> sorted = new ArrayList<>(wCount.entrySet());
-        Collections.sort(sorted, new Comparator<Map.Entry<String, Double>>() {
-
+        Collections.sort(sorted, new Comparator<>() {
+            @Override
             public int compare(Map.Entry<String, Double> a, Map.Entry<String, Double> b) {
-                int countCompare = b.getValue().compareTo(a.getValue());
-                if (countCompare != 0) {
-                    return countCompare;
-                } else {
+                int finalR = b.getValue().compareTo(a.getValue());
+                if (finalR == 0) {
                     return a.getKey().compareTo(b.getKey());
                 }
+                return finalR;
             }
         });
-
+        int resultSize = Math.min(k, sorted.size());
         List<String> topWords = new ArrayList<>();
-        int i = 0;
-        for (Map.Entry<String, Double> entry : sorted) {
-            if (i < k) {
-                topWords.add(entry.getKey());
-                i++;
-            } else {
-                break;
-            }
+        for (int i = 0; i < resultSize; i++) {
+            topWords.add(sorted.get(i).getKey());
         }
 
         Collections.sort(topWords);
@@ -87,8 +72,8 @@ public class HyponymsHandler extends NgordnetQueryHandler {
     private double totalWords(String word, int startYear, int endYear) {
         TimeSeries history = mapN.countHistory(word, startYear, endYear);
         double total = 0;
-        for (Double count : history.values()) {
-            total += count;
+        for (Map.Entry<Integer, Double> entry : history.entrySet()) {
+            total += entry.getValue();
         }
         return total;
     }

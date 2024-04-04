@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.util.*;
 
 public class WordNet {
-    private final Map<String, Set<Integer>> wordID = new HashMap<>();
-    private final Graph graph = new Graph();
-    private final Map<Integer, Set<String>> idWord = new HashMap<>();
+    private final Map<String, Set<Integer>> wordID;
+    private final Graph graph;
+    private final Map<Integer, Set<String>> synsetID;
 
     public WordNet(String synsetFile, String hyponymFile) {
+        this.graph = new Graph();
+        this.synsetID = new HashMap<>();
+        this.wordID = new HashMap<>();
         loadSynset(synsetFile);
         loadHyponym(hyponymFile);
     }
@@ -20,14 +23,16 @@ public class WordNet {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] token = line.split(",");
-                int sID = Integer.parseInt(token[0]);
+                Integer sID = Integer.parseInt(token[0]);
+                graph.addNode(sID);
+
                 String[] words = token[1].split(" ");
-                Set<String> set = new HashSet<>(Arrays.asList(words));
-                idWord.put(sID, set);
+                Set<String> wordSet = new HashSet<>();
                 for (String word : words) {
+                    wordSet.add(word);
                     wordID.computeIfAbsent(word, k -> new HashSet<>()).add(sID);
                 }
-                graph.addNode(sID);
+                synsetID.put(sID, wordSet);
             }
         } catch (IOException X) {
             X.printStackTrace(); //used https://www.educative.io/answers/what-is-the-printstacktrace-method-in-java//
@@ -39,9 +44,9 @@ public class WordNet {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] token = line.split(",");
-                int hypernymID = Integer.parseInt(token[0]);
+                Integer hypernymID = Integer.parseInt(token[0]);
                 for (int i = 1; i < token.length; i++) {
-                    int hyponymID = Integer.parseInt(token[i]);
+                    Integer hyponymID = Integer.parseInt(token[i]);
                     graph.addEdge(hypernymID, hyponymID);
                 }
             }
@@ -52,48 +57,68 @@ public class WordNet {
 
 
     public Set<String> commonHyponym(List<String> words) {
-        Set<String> hyponyms = new HashSet<>();
+        Set<String> commonHyponym = new TreeSet<>();
+        boolean firstWord = true;
         for (String word : words) {
-            Set<Integer> ids = wordID.getOrDefault(word, Collections.emptySet());
-            for (int id : ids) {
-                Set<Integer> reachableIds = graph.getNodes(id);
-                for (int reachableId : reachableIds) {
-                    hyponyms.addAll(idWord.getOrDefault(reachableId, Collections.emptySet()));
+            Set<String> currentHyponyms = new HashSet<>();
+            if (wordID.containsKey(word)) {
+                for (Integer id : wordID.get(word)) {
+                    Set<Integer> reachIDs = graph.getNodes(id);
+                    for (Integer reachID : reachIDs) {
+                        currentHyponyms.addAll(synsetID.get(reachID));
+                    }
                 }
             }
+            if (firstWord) {
+                commonHyponym.addAll(currentHyponyms);
+                firstWord = false;
+            } else {
+                commonHyponym.retainAll(currentHyponyms);
+            }
         }
-        return hyponyms;
+        return commonHyponym;
     }
 
     public Set<String> commonAncestor(List<String> words) {
-        Set<Integer> ancestorIds = new HashSet<>();
-        boolean firstWord = true;
+        if (words.isEmpty()) {
+            return Collections.emptySet();
+        }
 
+        List<Set<String>> allAncestorsWords = new ArrayList<>();
         for (String word : words) {
-            Set<Integer> ids = wordID.getOrDefault(word, Collections.emptySet());
-            Set<Integer> currentAncestors = new HashSet<>();
-            for (Integer id : ids) {
-                currentAncestors.addAll(graph.getNodesReverse(id));
-            }
-            if (firstWord) {
-                ancestorIds.addAll(currentAncestors);
-                firstWord = false;
-            } else {
-                ancestorIds.retainAll(currentAncestors);
+            Set<String> wordAncestors = getAncestorWords(word);
+            if (!wordAncestors.isEmpty()) {
+                allAncestorsWords.add(wordAncestors);
             }
         }
-        return idToWord(ancestorIds);
+        if (allAncestorsWords.isEmpty()) {
+            return Collections.emptySet();
+        }
+        Set<String> commonAncestors = intersect(allAncestorsWords);
+
+        return commonAncestors;
     }
 
-    private Set<String> idToWord(Set<Integer> ids) {
-        Set<String> words = new TreeSet<>();
-        for (Integer id : ids) {
-            Set<String> set = idWord.get(id);
-            if (set != null) {
-                words.addAll(set);
-            }
+    private Set<String> getAncestorWords(String word) {
+        Set<Integer> ancestorIDs = new HashSet<>();
+        Set<String> ancestorWords = new HashSet<>();
+        Set<Integer> wordSynsetIDs = wordID.getOrDefault(word, Collections.emptySet());
+        for (Integer synsetId : wordSynsetIDs) {
+            ancestorIDs.addAll(graph.getNodesReverse(synsetId));
         }
-        return words;
+
+        for (Integer ancestorId : ancestorIDs) {
+            ancestorWords.addAll(synsetID.getOrDefault(ancestorId, Collections.emptySet()));
+        }
+
+        return ancestorWords;
+    }
+
+    private Set<String> intersect(List<Set<String>> ancestorWordsList) {
+        Set<String> commonAncestors = new HashSet<>(ancestorWordsList.get(0));
+        for (Set<String> ancestors : ancestorWordsList) {
+            commonAncestors.retainAll(ancestors);
+        }
+        return commonAncestors;
     }
 }
-
