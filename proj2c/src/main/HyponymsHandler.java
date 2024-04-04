@@ -23,34 +23,43 @@ public class HyponymsHandler extends NgordnetQueryHandler {
     public String handle(NgordnetQuery query) {
         List<String> words = query.words();
         int startYear = query.startYear() == 0 ? start : query.startYear();
-        int endYear = query.startYear() == 0 ? end : query.endYear();
+        int endYear = query.endYear() == 0 ? end : query.endYear();
         int k = query.k();
-        Set<String> result = new HashSet<>();
+        Set<String> result;
 
         if (query.ngordnetQueryType() == NgordnetQueryType.HYPONYMS) {
             result = wordNet.commonHyponym(words);
         } else if (query.ngordnetQueryType() == NgordnetQueryType.ANCESTORS) {
             result = wordNet.commonAncestor(words);
+        } else {
+            result = new HashSet<>();
         }
+        return finalResult(result, startYear, endYear, k);
+    }
+
+    private String finalResult(Set<String> result, int startYear, int endYear, int k) {
         if (k > 0) {
-            List<String> newTopKWords = topKWords(result, startYear, endYear, k);
-            return newTopKWords.toString();
+            return topKWords(result, startYear, endYear, k).toString();
+        } else {
+            List<String> resultList = new ArrayList<>(result);
+            Collections.sort(resultList);
+            return resultList.toString();
         }
-        return new ArrayList<>(result).toString();
     }
 
     private List<String> topKWords(Set<String> words, int startYear, int endYear, int k) {
-        Map<String, Integer> wCount = new HashMap<>();
+        Map<String, Double> wCount = new TreeMap<>();
         for (String word : words) {
-            int count = (int) totalWords(word, startYear, endYear);
-            if (count > 0) {
-                wCount.put(word, count);
+            double total = totalWords(word, startYear, endYear);
+            if (total > 0) {
+                wCount.put(word, total);
             }
         }
 
-        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(wCount.entrySet());
-        Collections.sort(sorted, new Comparator<>() {
-            public int compare(Map.Entry<String, Integer> a, Map.Entry<String, Integer> b) {
+        List<Map.Entry<String, Double>> sorted = new ArrayList<>(wCount.entrySet());
+        Collections.sort(sorted, new Comparator<Map.Entry<String,Double>>() {
+
+            public int compare(Map.Entry<String, Double> a, Map.Entry<String, Double> b) {
                 int countCompare = b.getValue().compareTo(a.getValue());
                 if (countCompare != 0) {
                     return countCompare;
@@ -59,10 +68,16 @@ public class HyponymsHandler extends NgordnetQueryHandler {
                 }
             }
         });
-        int resultSize = Math.min(k, sorted.size());
+
         List<String> topWords = new ArrayList<>();
-        for (int i = 0; i < resultSize; i++) {
-            topWords.add(sorted.get(i).getKey());
+        int i = 0;
+        for (Map.Entry<String, Double> entry : sorted) {
+            if (i < k) {
+                topWords.add(entry.getKey());
+                i++;
+            } else {
+                break;
+            }
         }
 
         Collections.sort(topWords);

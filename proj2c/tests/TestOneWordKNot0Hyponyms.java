@@ -58,7 +58,7 @@ public class TestOneWordKNot0Hyponyms {
 
         NgordnetQuery nq = new NgordnetQuery(words, 2010, 2020, 2, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
-        String expected = "[CS170, CS172]";
+        String expected = "[CS61A, CS61B]";
         assertThat(actual).isEqualTo(expected);
     }
 

@@ -56,15 +56,16 @@ public class TestCommonAncestors {
     }
 
     @Test
-    public void testSpecHappeningAndModification() {
+    public void testEntity() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
-                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("happening", "modification");
+                LARGE_WORDS_FILE, TOTAL_COUNTS_FILE, LARGE_SYNSET_FILE, LARGE_HYPONYM_FILE);
+        List<String> words = List.of("entity");
 
-        NgordnetQuery nq = new NgordnetQuery(words, 2000, 2020, 0, NgordnetQueryType.ANCESTORS);
+        NgordnetQuery nq = new NgordnetQuery(words, 1470, 2019, 8, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
-        String expected = ("[event, happening, natural_event, occurrence, occurrent]");
+        String expected = "[are, at, can, have, he, in, one, will]";
         assertThat(actual).isEqualTo(expected);
     }
+    
 
 }
