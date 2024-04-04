@@ -25,7 +25,7 @@ public class WordNet {
                 Set<String> set = new HashSet<>(Arrays.asList(words));
                 idWord.put(sID, set);
                 for (String word : words) {
-                   wordID.computeIfAbsent(word, k -> new HashSet<>()).add(sID);
+                    wordID.computeIfAbsent(word, k -> new HashSet<>()).add(sID);
                 }
                 graph.addNode(sID);
             }
@@ -84,6 +84,7 @@ public class WordNet {
         }
         return idToWord(ancestorIds);
     }
+
     private Set<String> idToWord(Set<Integer> ids) {
         Set<String> words = new TreeSet<>();
         for (Integer id : ids) {

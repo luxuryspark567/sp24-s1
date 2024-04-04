@@ -3,8 +3,8 @@ package main;
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
 import ngrams.TimeSeries;
-import plotting.Plotter;
 import org.knowm.xchart.XYChart;
+import plotting.Plotter;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,8 @@ public class DummyHistoryHandler extends NgordnetQueryHandler {
         System.out.println("End Year: " + q.endYear());
 
         System.out.println("But I'm totally ignoring that and just plotting a parabola\n" +
-                        "and a sine wave, because your job will be to figure out how to\n" +
-                        "actually use the query data.");
+                "and a sine wave, because your job will be to figure out how to\n" +
+                "actually use the query data.");
 
         TimeSeries parabola = new TimeSeries();
         for (int i = 0; i < 100; i += 1) {
@@ -27,7 +27,7 @@ public class DummyHistoryHandler extends NgordnetQueryHandler {
 
         TimeSeries sinWave = new TimeSeries();
         for (int i = 0; i < 100; i += 1) {
-            sinWave.put(i, 1000 + 500 * Math.sin(i/100.0*2*Math.PI));
+            sinWave.put(i, 1000 + 500 * Math.sin(i / 100.0 * 2 * Math.PI));
         }
 
         ArrayList<TimeSeries> lts = new ArrayList<>();

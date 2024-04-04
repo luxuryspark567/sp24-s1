@@ -66,6 +66,6 @@ public class TestCommonAncestors {
         String expected = "[are, at, can, have, he, in, one, will]";
         assertThat(actual).isEqualTo(expected);
     }
-    
+
 
 }

@@ -57,7 +57,7 @@ public class HyponymsHandler extends NgordnetQueryHandler {
         }
 
         List<Map.Entry<String, Double>> sorted = new ArrayList<>(wCount.entrySet());
-        Collections.sort(sorted, new Comparator<Map.Entry<String,Double>>() {
+        Collections.sort(sorted, new Comparator<Map.Entry<String, Double>>() {
 
             public int compare(Map.Entry<String, Double> a, Map.Entry<String, Double> b) {
                 int countCompare = b.getValue().compareTo(a.getValue());

@@ -8,6 +8,7 @@ public class Main {
     static {
         LoggerFactory.getLogger(Main.class).info("\033[1;38mChanging text color to white");
     }
+
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
         String wordFile = "./data/ngrams/top_14377_words.csv";
