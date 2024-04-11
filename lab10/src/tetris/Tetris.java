@@ -96,7 +96,7 @@ public class Tetris {
         while (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
             if (currentTetromino == null) {
-                break;
+                break; //exits loop//
             }
             if (key == 'a') {
                 movement.tryMove(-1, 0);
@@ -147,15 +147,15 @@ public class Tetris {
             for (int col = 0; col < width; col++) {
                 if (tiles[col][row] == Tileset.NOTHING) {
                     complete = false;
-                    break;
+                    break; //exits loop//
                 }
             }
-            if (complete) {
+            if (complete) { //checks that its within bounds//
                 linesCleared++;
-                for (int col = 0; col < width; col++) {
+                for (int col = 0; col < width; col++) { //updates columns//
                     if (tiles[col][row] == Tileset.NOTHING) ;
                 }
-                for (int mRow = row; mRow < height - 1; mRow++) {
+                for (int mRow = row; mRow < height - 1; mRow++) { //updates rows//
                     for (int col = 0; col < width; col++) {
                         tiles[col][mRow] = tiles[col][mRow + 1];
                     }
@@ -166,7 +166,7 @@ public class Tetris {
                 row--;
             }
         }
-        if (linesCleared > 0) {
+        if (linesCleared > 0) { //increases score//
             incrementScore(linesCleared);
         }
         fillAux();
@@ -181,7 +181,7 @@ public class Tetris {
         spawnPiece();
         while (!isGameOver()) {
             updateBoard();
-            if (currentTetromino == null) {
+            if (currentTetromino == null) { //notetronimo to use anymore//
                 clearLines(board);
                 renderScore();
                 if (!isGameOver()) {
@@ -190,11 +190,6 @@ public class Tetris {
             }
             renderBoard();
 
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                System.out.println("Game interrupted");
-            }
         }
     }
 
