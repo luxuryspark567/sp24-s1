@@ -123,11 +123,11 @@ public class Tetris {
     private void incrementScore(int linesCleared) {
         if (linesCleared == 1) {
             score += 100;
-        } else if (linesCleared == 1) {
+        } else if (linesCleared == 2) {
             score += 300;
-        } else if (linesCleared == 1) {
+        } else if (linesCleared == 3) {
             score += 500;
-        } else if (linesCleared == 1) {
+        } else if (linesCleared == 4) {
             score += 800;
         }
     }
@@ -203,9 +203,7 @@ public class Tetris {
      */
     private void renderScore() {
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.filledRectangle(WIDTH / 2, HEIGHT + 3, WIDTH / 2, 1);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(WIDTH / 2, HEIGHT + 3, "Score: " + score);
+        StdDraw.text(7, 19, "Score: " + score);
         StdDraw.show();
     }
 
